@@ -812,15 +812,7 @@
                         <span class="details_span">Novos membros</span>
                         <input name="novos_membros" id="novos_membros" type="text" placeholder="Nickname dos novos membros. Separe com ' / ' Ex: Qox / zjoaop" required>
                     </div>
-                    <div class="input-box">
-                        <span class="details_span">Cargo</span>
-                        <select id="necessidade_novos">                          
-                            <option value="" disabled selected>Selecione o cargo selecionado</option>
-                            <option value="1">Monitor</option>
-                            
-                             
-                        </select>
-                    </div>
+                    
                     <div class="button">
                         <input type="submit" id="enviar_enter" value="Enviar">
                     </div>
@@ -1252,9 +1244,8 @@ function fill_entradas(e) {
   retornaDateTime('horario_envio_entradas');
   var isValid = true;
 
-  // Check if #novos_membros and #necessidade_novos are not null
+  // Check if #novos_membros is not null
   if ($("#novos_membros").val() == null) { isValid = false; }
-  if ($("#necessidade_novos").val() == null) { isValid = false; }
 
   // Check if any input within #novos_membros is empty
   $("#novos_membros").find("input").each(function() {
@@ -1267,33 +1258,15 @@ function fill_entradas(e) {
 
       var entradas = $('#novos_membros').val().split(' / ');
       var lista = '';
+      var dataAtual = retornaData(0); // Supondo que retornaData(0) retorna a data atual no formato desejado
 
-      // Build the list of nicknames
+      // Build the list of nicknames with dates
       entradas.forEach(function(nickname) {
-          lista += "\n • [b]" + nickname + '[/b] - ' + retornaData(0);
+          lista += "\n • [b]" + nickname + '[/b] - ' + dataAtual;
       });
 
-      // Determine the necessity based on the selected value
-      var necessidade;
-      switch ($('#necessidade_novos').val()) {
-          case "1":
-              necessidade = "Monitor";
-              break;
-          case "2":
-              necessidade = "Departamento de Eventos";
-              break;
-          case "3":
-              necessidade = "Departamento de Markething";
-              break;
-          case "4":
-              necessidade = "";
-              break;
-          default:
-              necessidade = "";
-      }
-
-      // Construct the final text
-      var texto = "[font=Poppins][size=18][center][color=#2D5CAB][b]ENTRADA[/b][/color][/center][/size]\n[b]Nick:[/b] " + $('#novos_membros').val() + "\n[b]Setor:[/b] " + necessidade + "[/font]";
+      // Construct the final text with date next to each nick
+      var texto = "[font=Poppins][size=18][center][color=#2D5CAB][b]ENTRADA[/b][/color][/center][/size]\n" + lista + "[/font]";
 
       document.getElementById('fa-generated-message').value = texto;
       send_data('novo_membro');
@@ -1305,6 +1278,8 @@ function fill_entradas(e) {
 
   return isValid;
 }
+
+
 
 
 
